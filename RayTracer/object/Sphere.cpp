@@ -1,12 +1,13 @@
 #include "Sphere.h"
 
-bool Sphere::Hit(const Ray& r, float min, float max, RaycastHit& hit)
+bool Sphere::Hit(const Ray& ray, float min, float max, RaycastHit& hit)
 {
-	glm::vec3 oc = r.origin - m_center;
-	float a = glm::dot(r.direction, r.direction);
-	float b = 2 * glm::dot(r.direction, oc);
+	glm::vec3 oc = ray.origin - m_center;
+	float a = glm::dot(ray.direction, ray.direction);
+	float b = 2 * glm::dot(ray.direction, oc);
 	float c = glm::dot(oc, oc) - (m_radius * m_radius);
 
+	// b^2 - 4ac
 	float discriminant = (b * b) - (4 * a * c);
 
 	if (discriminant >= 0)
@@ -16,11 +17,10 @@ bool Sphere::Hit(const Ray& r, float min, float max, RaycastHit& hit)
 		if (t > min && t < max)
 		{
 			hit.distance = t;
-			hit.point = r.getPoint(t);
+			hit.point = ray.GetPoint(t);
 			hit.normal = (hit.point - m_center) / m_radius;
 
 			hit.material = m_material.get();
-
 			return true;
 		}
 
@@ -29,7 +29,7 @@ bool Sphere::Hit(const Ray& r, float min, float max, RaycastHit& hit)
 		if (t > min && t < max)
 		{
 			hit.distance = t;
-			hit.point = r.getPoint(t);
+			hit.point = ray.GetPoint(t);
 			hit.normal = (hit.point - m_center) / m_radius;
 
 			hit.material = m_material.get();
